@@ -1,6 +1,7 @@
 package com.harunbekcan.samplejetpackcomposeproject.di
 
-import com.harunbekcan.samplejetpackcomposeproject.data.ServiceInterface
+import com.harunbekcan.samplejetpackcomposeproject.data.repository.CryptoRepository
+import com.harunbekcan.samplejetpackcomposeproject.data.service.ServiceInterface
 import com.harunbekcan.samplejetpackcomposeproject.utils.Constants.BASE_URL
 import com.harunbekcan.samplejetpackcomposeproject.utils.CustomHttpLogger
 import dagger.Module
@@ -19,11 +20,17 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideCryptoApi(httpClient: OkHttpClient): ServiceInterface {
+    fun provideCryptoRepository(
+        api: ServiceInterface
+    ) = CryptoRepository(api)
+
+    @Singleton
+    @Provides
+    fun provideCryptoApi(okHttpClient: OkHttpClient): ServiceInterface {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
-            .client(httpClient)
+            .client(okHttpClient)
             .build()
             .create(ServiceInterface::class.java)
     }
@@ -39,5 +46,12 @@ object AppModule {
             .addInterceptor(httpLoggingInterceptor)
             .build()
     }
+
+    @Singleton
+    @Provides
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply {
+            setLevel(HttpLoggingInterceptor.Level.BASIC)
+        }
 
 }

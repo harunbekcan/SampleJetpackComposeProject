@@ -1,4 +1,4 @@
-package com.harunbekcan.samplejetpackcomposeproject.data
+package com.harunbekcan.samplejetpackcomposeproject.data.service
 
 import com.harunbekcan.samplejetpackcomposeproject.data.response.CryptoListResponse
 import retrofit2.http.GET
