@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = CRYPTO_LIST_SCREEN
                 ) {
                     composable(CRYPTO_LIST_SCREEN) {
-                        CryptoListScreen(navController = navController)
+                        CryptoListScreen()
                     }
                 }
             }
