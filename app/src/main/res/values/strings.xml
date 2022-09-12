@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SampleJetpackComposeProject</string>
+
+
+    <string name="search_text">Search&#8230;</string>
+
 </resources>

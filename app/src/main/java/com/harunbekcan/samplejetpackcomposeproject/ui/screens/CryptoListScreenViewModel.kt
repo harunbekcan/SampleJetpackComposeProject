@@ -7,6 +7,7 @@ import com.harunbekcan.samplejetpackcomposeproject.data.repository.CryptoReposit
 import com.harunbekcan.samplejetpackcomposeproject.data.response.CryptoListResponseItem
 import com.harunbekcan.samplejetpackcomposeproject.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +17,9 @@ class CryptoListScreenViewModel @Inject constructor(private val repository: Cryp
     var cryptoList = mutableStateOf<List<CryptoListResponseItem>>(listOf())
     var errorMessage = mutableStateOf("")
     var isLoading = mutableStateOf(false)
+
+    private var searchCryptoList = listOf<CryptoListResponseItem>()
+    private var isSearchStarting = true
 
     init {
         getCryptos()
@@ -42,4 +46,28 @@ class CryptoListScreenViewModel @Inject constructor(private val repository: Cryp
             }
         }
     }
+
+    fun searchCryptoList(keyword:String){
+        val listToSearch = if (isSearchStarting){
+            cryptoList.value
+        } else {searchCryptoList}
+
+        viewModelScope.launch(Dispatchers.Default) {
+            if(keyword.isEmpty()) {
+                cryptoList.value = searchCryptoList
+                isSearchStarting = true
+                return@launch
+            }
+            val results = listToSearch.filter {
+                it.currency?.contains(keyword.trim(), ignoreCase = true) ?: false
+            }
+            if(isSearchStarting) {
+                searchCryptoList = cryptoList.value
+                isSearchStarting = false
+            }
+            cryptoList.value = results
+        }
+    }
+
+
 }
