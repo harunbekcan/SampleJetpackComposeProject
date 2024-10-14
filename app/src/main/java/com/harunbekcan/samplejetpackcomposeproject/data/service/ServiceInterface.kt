@@ -8,9 +8,9 @@ interface ServiceInterface {
 
     //Example_Request = https://api.nomics.com/v1/currencies/ticker?key=af878d71727f90ea12398c681941624b6aeacba0
 
-    @GET("currencies/ticker")
+    /*@GET("currencies/ticker")
     suspend fun getCurrencies(
         @Query("key") key: String
-    ): CryptoListResponse
+    ): CryptoListResponse*/
 
 }
